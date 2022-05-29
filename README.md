@@ -41,7 +41,7 @@ terraform apply
 1. SSH into your new server instance with the following command. The additional parameter `-L 8888:localhost:8888` will forward the 8888 port to your local machine. We will use the port for Jupyter Notebook.
 
 ```
-ssh -i ~/.ssh/aws_key ubuntu@<your_server_public_ip>
+ssh -i ~/.ssh/aws_key ubuntu@<your_server_public_ip> -L 8888:localhost:8888
 ```
 
 2. Start jupyter notebook
