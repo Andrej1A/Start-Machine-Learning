@@ -15,7 +15,7 @@ terraform apply
 ```
 
 
-# Copyright
+## Copyright
 
 Copyright 2022 Andrej Albrecht
 
