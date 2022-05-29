@@ -1,6 +1,6 @@
-# AWS-GPU-Instance-Terraform
+# Start-Machine-Learning
 
-## Setup
+## Setup your cloud infrastructure on AWS
 
 1. Install Terraform
 
