@@ -16,8 +16,8 @@ ssh-keygen -t rsa -b 2048 -C "your.mail@address.com"
 ```
 aws_access_key = ""
 aws_secret_key = ""
-aws_key_pair_name = ""
-ssh_public_key = ""
+aws_key_pair_name = "aws_key"
+ssh_public_key = "<content-of-file:/Users/username/.ssh/aws_key.pub>"
 ssh_private_key_file_path = "/Users/username/.ssh/aws_key"
 ```
 
