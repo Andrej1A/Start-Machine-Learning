@@ -8,13 +8,13 @@ resource "aws_instance" "gpu_server" {
     # ami in region (eu-west-1) - Deep Learning AMI (Ubuntu 18.04) Version 60.4
     ami = "ami-07afb32b4cb2c5c44" # the ami-id depends on your region
     instance_type = "g3s.xlarge"
-    key_name = "aws_andrej_key"
+    key_name = "${var.aws_key_pair_name}"
     vpc_security_group_ids = [aws_security_group.main.id]
 
     provisioner "remote-exec" {
       inline = [
-        "touch hello.txt",
-        "echo helloworld remote provisioner >> hello.txt",
+        "touch hello_world.txt",
+        "echo helloworld >> hello_world.txt",
         "mkdir workspace",
         "sudo mount /dev/xvdb1 workspace",
         "sudo chown ubuntu:ubuntu workspace/",
@@ -25,7 +25,7 @@ resource "aws_instance" "gpu_server" {
       type        = "ssh"
       host        = self.public_ip
       user        = "ubuntu"
-      private_key = file("/Users/andrej/.ssh/aws_andrej_key")
+      private_key = file("${var.ssh_private_key_file_path}")
       timeout     = "7m"
    }
    tags = {
@@ -79,6 +79,6 @@ resource "aws_volume_attachment" "attach_ml_dataset_volume_to_gpuserver1" {
 }
 
 resource "aws_key_pair" "deployer" {
-  key_name   = "aws_andrej_key"
+  key_name   = "${var.aws_key_pair_name}"
   public_key = "${var.ssh_public_key}"
 }
