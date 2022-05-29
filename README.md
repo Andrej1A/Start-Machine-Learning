@@ -2,6 +2,12 @@
 
 Machine Learning plug-and-play script collection.
 
+## Setup SSH keypair for your server instance and save it to the file `~/.ssh/aws_key`
+
+```
+ssh-keygen -t rsa -b 2048 -C "your.mail@address.com"
+```
+
 ## Setup your cloud infrastructure on AWS
 
 1. Install Terraform
@@ -29,6 +35,23 @@ terraform plan
 ```
 terraform apply
 ```
+
+## Start with Machine Learning on your new server instance
+
+1. SSH into your new server instance with the following command. The additional parameter `-L 8888:localhost:8888` will forward the 8888 port to your local machine. We will use the port for Jupyter Notebook.
+
+```
+ssh -i ~/.ssh/aws_key ubuntu@<your_server_public_ip>
+```
+
+2. Start jupyter notebook
+```
+jupyter notebook
+```
+
+3. Open the link including the secret_token from the log output on your local machine:
+> http://127.0.0.1:8888/?secret_token=
+
 
 
 ## Copyright
