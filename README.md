@@ -1,8 +1,8 @@
 # Start-Machine-Learning
 
-## Setup your cloud infrastructure on AWS
-
 Machine Learning plug-and-play script collection.
+
+## Setup your cloud infrastructure on AWS
 
 1. Install Terraform
 
