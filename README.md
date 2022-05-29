@@ -53,6 +53,11 @@ jupyter notebook
 > http://127.0.0.1:8888/?secret_token=
 
 
+## For later, when you don't need your infrastructure anymore
+The following command will destroy all created resources:
+```
+terraform destroy
+```
 
 ## Copyright
 
