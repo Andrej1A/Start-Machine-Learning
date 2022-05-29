@@ -2,14 +2,30 @@
 
 ## Setup your cloud infrastructure on AWS
 
+Machine Learning plug-and-play script collection.
+
 1. Install Terraform
 
-2. Check what will happen to your infrastructure:
+2. (Optionally) Create a file `terraform.tfvars` for your variables or enter them in the prompt in step four and/or step five:
+```
+aws_access_key = ""
+aws_secret_key = ""
+aws_key_pair_name = ""
+ssh_public_key = ""
+ssh_private_key_file_path = "/Users/username/.ssh/aws_key"
+```
+
+3. Initialize this Terraform project
+```
+terraform init
+```
+
+4. Check what will happen to your infrastructure:
 ```
 terraform plan
 ```
 
-3. Apply your infrastructure setup:
+5. Apply your infrastructure setup:
 ```
 terraform apply
 ```
