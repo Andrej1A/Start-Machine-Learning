@@ -4,6 +4,12 @@
 
 1. Install Terraform
 
-2. > terraform plan
+2. Check what will happen to your infrastructure:
+```
+terraform plan
+```
 
-3. > terraform apply
+3. Apply your infrastructure setup:
+```
+terraform apply
+```
