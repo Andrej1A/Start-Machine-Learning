@@ -74,9 +74,10 @@ cd ../
 
 2. Use the public-ip which was given to your GPU-Server through the elastic ip and use it in step 4 for your inventory file.
 
-  The public-ip which where given to your GPU-server, can be determined by the following command or can be found in your [AWS-console](https://eu-west-1.console.aws.amazon.com/ec2/v2/home?region=eu-west-1#Addresses:) and the created GPU-server instance.
+  The public-ip and private-ip which where given to your GPU-server, can be determined by the following command or can be found in your [AWS-console](https://eu-west-1.console.aws.amazon.com/ec2/v2/home?region=eu-west-1#Addresses:) and the created GPU-server instance.
 ```
 terraform output gpu_server_global_ips
+terraform output gpu_server_private_ips
 ```
 
 3. Switch into the kubespray foler:
@@ -108,14 +109,13 @@ cat inventory/mycluster/group_vars/all/all.yml
 cat inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
 ```
 
-  Kubeflow (which we will install later) supports Kubernetes version up to v1.21, please set this Kubernetes version into the following file: `inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml`. Additionaly, set the `nvidia_accelerator_enabled` to true.
+  Kubeflow (which we will install later) supports Kubernetes version up to v1.21, please set this Kubernetes version into the following file: `inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml`. Additionaly, set the `nvidia_accelerator_enabled` to true and uncomment the `nvidia_gpu_device_plugin_container`.
 
 ```
 kube_version: v1.21.6
 
 nvidia_accelerator_enabled: true
 
-#
 nvidia_gpu_device_plugin_container: "k8s.gcr.io/nvidia-gpu-device-plugin@sha256:0842734032018be107fa2490c98156992911e3e1f2a21e059ff0105b07dd8e9e"
 
 ```
@@ -168,10 +168,10 @@ kubectl version
 9. After running the following command you can check the status of your Kubernetes cluster (With one node for now).
 ```
 kubectl get nodes
+# Output:
+# NAME    STATUS   ROLES                  AGE   VERSION
+# node1   Ready    control-plane,master   22m   v1.21.6
 ```
-
-> NAME    STATUS   ROLES                  AGE   VERSION
-> node1   Ready    control-plane,master   22m   v1.21.6
 
 
 ## For later, when you don't need your infrastructure anymore
@@ -184,7 +184,7 @@ terraform destroy
 
 - [x] As a Machine-Learning-beginner, I would like to have a script which launches a **GPU-Instance on AWS with a Jupyter Notebook**, to have a sandbox for my first Machine Learning experiments.
 
-- [ ] As a Machine-Learning-practitionar, I would like to have a (production-ready) **Kubernetes running on a single server**, on which I can deploy my first Machine Learning models to use them for inference in my web/ api projects to make experiences with Machine Learning deployment process, MLOps and Kubernetes. (KubeSpray)
+- [x] As a Machine-Learning-practitionar, I would like to have a (production-ready) **Kubernetes running on a single server**, on which I can deploy my first Machine Learning models to use them for inference in my web/ api projects to make experiences with Machine Learning deployment process, MLOps and Kubernetes. (KubeSpray)
 
 - [ ] As a Machine-Learning-practitionar, I would like to have a **KubeFlow environment** for my Machine-Learning projects, to have a simple, portable and scalable ecosystem for all Machine Learning steps (e.g. collecting data, building models, hyper parameter tuning, model serving, ...).
 
