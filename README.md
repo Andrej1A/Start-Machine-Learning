@@ -59,6 +59,17 @@ The following command will destroy all created resources:
 terraform destroy
 ```
 
+# Tasks
+
+- [x] As a Machine-Learning-beginner, I would like to have a script which launches a **GPU-Instance on AWS with a Jupyter Notebook**, to have a sandbox for my first Machine Learning experiments.
+
+- [ ] As a Machine-Learning-practitionar, I would like to have a (production-ready) **Kubernetes running on a single server**, on which I can deploy my first Machine Learning models to use them for inference in my web/ api projects to make experiences with Machine Learning deployment process, MLOps and Kubernetes. (KubeSpray)
+
+- [ ] As a Machine-Learning-practitionar, I would like to have a **KubeFlow environment** for my Machine-Learning projects, to have a simple, portable and scalable ecosystem for all Machine Learning steps (e.g. collecting data, building models, hyper parameter tuning, model serving, ...).
+
+- [ ] As a Machine-Learning-practitionar, I would like to have a working **Kubernetes-cluster** and KubeFlow-environment **with multiple servers**, which can be added to the installation procedure (Terraform-script, KubeSpray-inventory), to scale my Machine Learning projects.
+
+
 ## Copyright
 
 Copyright 2022 Andrej Albrecht
