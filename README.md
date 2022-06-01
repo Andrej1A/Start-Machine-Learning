@@ -2,6 +2,13 @@
 
 Machine Learning plug-and-play script collection.
 
+# Pre-Requirements
+
+- Installed Python 3.8.13+
+- Installed Ansible 2.11.6+
+- Installed Terraform v1.2.0+
+
+
 ## Setup SSH keypair for your server instance and save it to the file `~/.ssh/aws_key`
 
 ```
@@ -51,6 +58,120 @@ jupyter notebook
 
 3. Open the link including the secret_token from the log output on your local machine:
 > http://127.0.0.1:8888/?secret_token=
+
+
+## Install Kubernetes on the new launched instance
+
+We will use [Kubespray](https://github.com/kubernetes-sigs/kubespray) for the Kubernetes installation.
+
+1. Init the submodules of Kubespray and checkout to a specific commit (2022-06-01 21:40) which we have used for our installation routine:
+```
+git submodule init
+cd kubespray/
+git checkout 1f65e6d3b5752f9a64d3038e45d705f272acae58
+cd ../
+```
+
+2. Use the public-ip which was given to your GPU-Server through the elastic ip and use it in step 4 for your inventory file.
+
+  The public-ip which where given to your GPU-server, can be determined by the following command or can be found in your [AWS-console](https://eu-west-1.console.aws.amazon.com/ec2/v2/home?region=eu-west-1#Addresses:) and the created GPU-server instance.
+```
+terraform output gpu_server_global_ips
+```
+
+3. Switch into the kubespray foler:
+```
+cd kubespray/
+```
+
+4. Follow the installation steps on [Kubespray#quick-start](https://github.com/kubernetes-sigs/kubespray#quick-start):
+
+  The following commands should be executed inside the kubespray folder:
+
+```ShellSession
+# 1. Copy ``inventory/sample`` as ``inventory/mycluster``
+cp -rfp inventory/sample inventory/mycluster
+
+# Update Ansible inventory file with inventory builder
+# Step 2.1) Replace the ips with your public ip / ips of your GPU-server here:
+declare -a IPS=(10.10.1.3 10.10.1.4 10.10.1.5)
+
+# Or Step 2.2) you can execute this automatic command
+# declare -a IPS=($(terraform -chdir=../ output -json gpu_server_global_ips | jq -r '.[0]'))  
+# Please check if your ip's where entered correctly with the command: `echo $IPS`
+
+# Step 3.)
+CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
+
+# Review and change parameters under ``inventory/mycluster/group_vars``
+cat inventory/mycluster/group_vars/all/all.yml
+cat inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
+```
+
+  Kubeflow (which we will install later) supports Kubernetes version up to v1.21, please set this Kubernetes version into the following file: `inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml`. Additionaly, set the `nvidia_accelerator_enabled` to true.
+
+```
+kube_version: v1.21.6
+
+nvidia_accelerator_enabled: true
+
+#
+nvidia_gpu_device_plugin_container: "k8s.gcr.io/nvidia-gpu-device-plugin@sha256:0842734032018be107fa2490c98156992911e3e1f2a21e059ff0105b07dd8e9e"
+
+```
+
+5. Check your private ip which you will need in the next step:
+```
+terraform -chdir=../ output -json gpu_server_private_ips  | jq -r '.[0]'
+```
+
+6. Change the username to `ubuntu` inside the inventory file and add the private ip: `inventory/mycluster/hosts.yml`
+```
+all:
+  hosts:
+    node1:
+      ansible_host: <PUBLIC_ip>
+      ip: <PRIVATE_ip>
+      access_ip: <PRIVATE_ip>  # IP for other hosts to use to connect to.
+      ansible_user: ubuntu
+...
+```
+
+
+7. Start the Ansible script to let Kubespray install Kubernetes on your GPU server.
+
+Execute this command inside the kubespray folder.
+
+```ShellSession
+# Deploy Kubespray with Ansible Playbook - run the playbook as root
+# The option `--become` is required, as for example writing SSL keys in /etc/,
+# installing packages and interacting with various systemd daemons.
+# Without --become the playbook will fail to run!
+ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml --key-file "~/.ssh/aws_key"
+```
+
+In case the script is not running, try it again.
+When it continuous to fail, please create an issue and post us the error message with a description of your steps to reproduce the error.
+
+
+8. After the Ansible script run successfully through the installation. You have to copy the `/etc/kubernetes/admin.conf` file to your home directory `$HOME/.kube/config`. The admin.conf file has sometimes additional characters in it.
+After that you can check the Kubernetes version:
+```
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl version
+```
+ > Client Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.6", GitCommit:"d921bc6d1810da51177fbd0ed61dc811c5228097", GitTreeState:"clean", BuildDate:"2021-10-27T17:50:34Z", GoVersion:"go1.16.9", Compiler:"gc", Platform:"linux/amd64"}
+
+ > Server Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.6", GitCommit:"d921bc6d1810da51177fbd0ed61dc811c5228097", GitTreeState:"clean", BuildDate:"2021-10-27T17:44:26Z", GoVersion:"go1.16.9", Compiler:"gc", Platform:"linux/amd64"}
+
+9. After running the following command you can check the status of your Kubernetes cluster (With one node for now).
+```
+kubectl get nodes
+```
+
+> NAME    STATUS   ROLES                  AGE   VERSION
+> node1   Ready    control-plane,master   22m   v1.21.6
 
 
 ## For later, when you don't need your infrastructure anymore

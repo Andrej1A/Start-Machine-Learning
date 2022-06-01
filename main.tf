@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "4.16.0"
+    }
+  }
+}
+
 provider "aws" {
     access_key = "${var.aws_access_key}"
     secret_key = "${var.aws_secret_key}"
@@ -58,8 +67,21 @@ resource "aws_security_group" "main" {
      security_groups  = []
      self             = false
      to_port          = 22
+     self = false
+  },
+  {
+    cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    security_groups  = []
+    from_port   = 8
+    to_port     = 0
+    protocol    = "icmp"
+    description = "Allow ping from 0.0.0.0/0 everywhere"
+    self = false
   }
   ]
+
 }
 
 resource "aws_ebs_volume" "ml_dataset_volume" {
@@ -81,4 +103,22 @@ resource "aws_volume_attachment" "attach_ml_dataset_volume_to_gpuserver1" {
 resource "aws_key_pair" "deployer" {
   key_name   = "${var.aws_key_pair_name}"
   public_key = "${var.ssh_public_key}"
+}
+
+resource "aws_eip" "gpu_server_ip" {
+  instance = aws_instance.gpu_server.id
+  vpc      = true
+  tags = {
+    Name = "GPU-Server IP"
+  }
+}
+
+output "gpu_server_global_ips" {
+  value = "${aws_instance.gpu_server.*.public_ip}"
+  description = "The public IP address of the GPU server instances."
+}
+
+output "gpu_server_private_ips" {
+  value = "${aws_instance.gpu_server.*.private_ip}"
+  description = "The private IP address of the GPU server instances."
 }
