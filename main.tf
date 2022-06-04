@@ -20,14 +20,19 @@ resource "aws_instance" "gpu_server" {
     key_name = "${var.aws_key_pair_name}"
     vpc_security_group_ids = [aws_security_group.main.id]
 
+    root_block_device {
+      volume_size = 250 # lsblk
+    }
+
     provisioner "remote-exec" {
       inline = [
-        "touch hello_world.txt",
-        "echo helloworld >> hello_world.txt",
         "mkdir workspace",
         "sudo mount /dev/xvdb1 workspace",
         "sudo chown ubuntu:ubuntu workspace/",
         "sudo chmod 775 workspace/",
+        "echo 'sudo mount /dev/xvdb1 workspace' >> ~/.bashrc",
+        "echo 'sudo chown ubuntu:ubuntu workspace/' >> ~/.bashrc",
+        "echo 'sudo chmod 775 workspace/' >> ~/.bashrc",
       ]
     }
     connection {
@@ -54,6 +59,7 @@ resource "aws_security_group" "main" {
       security_groups  = []
       self             = false
       to_port          = 0
+      description = "Allow outgoing connection to the internet"
     }
   ]
  ingress                = [
@@ -68,7 +74,21 @@ resource "aws_security_group" "main" {
      self             = false
      to_port          = 22
      self = false
+     description = "Allow incoming SSH connections"
   },
+  {
+    cidr_blocks      = [ "0.0.0.0/0", ]
+    description      = ""
+    from_port        = 8888
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    to_port          = 8888
+    self = false
+    description = "Allow incoming 8888 connections"
+ },
   {
     cidr_blocks = ["0.0.0.0/0"]
     ipv6_cidr_blocks = []
@@ -81,12 +101,11 @@ resource "aws_security_group" "main" {
     self = false
   }
   ]
-
 }
 
 resource "aws_ebs_volume" "ml_dataset_volume" {
   availability_zone = "eu-west-1b"
-  size = 200
+  size = 500
   encrypted = false
   # skip_destroy  = true
   tags = {
@@ -94,6 +113,7 @@ resource "aws_ebs_volume" "ml_dataset_volume" {
   }
 }
 
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html
 resource "aws_volume_attachment" "attach_ml_dataset_volume_to_gpuserver1" {
   device_name = "/dev/xvdb"
   instance_id = aws_instance.gpu_server.id
