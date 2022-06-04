@@ -1,6 +1,9 @@
 # Start-Machine-Learning
 
-Machine Learning plug-and-play script collection.
+Machine Learning plug-and-play script collection for the setup and installation of:
+- AWS EC2-Server instance(s) with GPU(s)
+- [Kubernetes](https://kubernetes.io) cluster with [Kubespray](https://kubespray.io/#/)
+- [Kubeflow](https://www.kubeflow.org) on top of that cluster
 
 
 ## Pre-Requirements
