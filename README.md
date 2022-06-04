@@ -1,9 +1,9 @@
 # Start-Machine-Learning
 
 Machine Learning plug-and-play script collection for the setup and installation of:
-- AWS EC2-Server instance(s) with GPU(s)
+- AWS EC2-Server instance(s) including GPU(s) with [Terraform](https://www.terraform.io)
 - [Kubernetes](https://kubernetes.io) cluster with [Kubespray](https://kubespray.io/#/)
-- [Kubeflow](https://www.kubeflow.org) on top of that cluster
+- [Kubeflow](https://www.kubeflow.org) on top of that cluster with [kubeflow/manifests](https://github.com/kubeflow/manifests)
 
 
 ## Pre-Requirements
@@ -385,6 +385,7 @@ terraform destroy
 - [Kubeflow](https://www.kubeflow.org) - [repo](https://github.com/kubeflow/)
 - [AWS](https://aws.amazon.com)
 - [Terraform](https://www.terraform.io) - [repo](https://github.com/hashicorp/terraform)
+- [Kubeflow/manifests](https://github.com/kubeflow/manifests)
 
 
 ## Copyright
