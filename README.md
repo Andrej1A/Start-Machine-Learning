@@ -122,7 +122,7 @@ cat inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
 Kubeflow (which we will install later) supports Kubernetes version up to v1.21, please set this Kubernetes version into the following file: `inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml`. Additionaly, set the `nvidia_accelerator_enabled` to true and uncomment the `nvidia_gpu_device_plugin_container`.
 
 
-File `inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml`
+File `inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml` contains:
 ```
 kube_version: v1.21.6
 
@@ -133,13 +133,13 @@ nvidia_gpu_device_plugin_container: "k8s.gcr.io/nvidia-gpu-device-plugin@sha256:
 persistent_volumes_enabled: true
 ```
 
-File `inventory/mycluster/group_vars/all/all.yml`
+File `inventory/mycluster/group_vars/all/all.yml` contains:
 ```
 docker_storage_options: -s overlay2
 ```
 
 
-File `inventory/mycluster/group_vars/k8s_cluster/addons.yml`
+File `inventory/mycluster/group_vars/k8s_cluster/addons.yml` contains:
 ```
 # Rancher Local Path Provisioner
 local_path_provisioner_enabled: true
@@ -239,20 +239,25 @@ After you have checked your Kubernetes cluster, you can start the installation o
 
 1. Login to your server, download and setup kustomize:
 ```
-cd ../ # got back to the root folder
+# got back to the root folder
+cd ../
 
+# Print the global ip of your server
 terraform output -json gpu_server_global_ips  | jq -r '.[0]'
 
+# SSH into your server
 ssh -i ~/.ssh/aws_key ubuntu@<public_ip> -L 8888:localhost:8888    
 
-ssh -i ~/.ssh/aws_key ubuntu@$(terraform output -json gpu_server_global_ips  | jq -r '.[0]')
-
+# Download kustomize on your server
 wget https://github.com/kubernetes-sigs/kustomize/releases/download/v3.2.0/kustomize_3.2.0_linux_amd64
 
+# Copy kustomize to your user bin folder
 sudo cp kustomize_3.2.0_linux_amd64 /usr/bin/kustomize
 
+# Make kustomize executable
 sudo chmod u+x /usr/bin/kustomize
 
+# Change the ownership of kustomize to the current user and group
 sudo chown $(id -u):$(id -g) /usr/bin/kustomize
 ```
 
@@ -304,7 +309,7 @@ while ! kustomize build example | kubectl apply -f -; do echo "Retrying to apply
 ```
 
 
-5. After the previous command run successfully through you can watch the starting process of all the kubeflow pods with the following command and wait until they all have been started.
+5. After the previous command run successfully through, you can watch the starting process of all the Kubeflow pods with the following command and wait until they all have been started.
 ```
 kubectl get pods --all-namespaces # one time
 watch kubectl get pods --all-namespaces # or watch
@@ -339,9 +344,14 @@ http://<public_ip>:8888/
 
 
 ## If something goes wrong
-In case something goes wrong, your can always reset your entire Kubernetes cluster with the following command, on your local machine. This will delete every resources and data inside the Kubernetes cluster:
+In case something goes wrong during the Kubeflow installation, you can always **reset your Kubernetes cluster** with the following command, on your local machine. This will delete every resources and data inside the Kubernetes cluster:
 ```
 ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root reset.yml --key-file "~/.ssh/aws_key"  
+```
+
+In case you make any changes to your Kubesray configuration files. You can let Kubespray **update your Kubernetes cluster** with the configuration changes by running the following command again:
+```
+ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml --key-file "~/.ssh/aws_key"  
 ```
 
 
