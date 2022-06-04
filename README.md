@@ -370,7 +370,7 @@ terraform destroy
 
 - [x] As a Machine-Learning-practitionar, I would like to have a **KubeFlow environment** for my Machine-Learning projects, to have a simple, portable and scalable ecosystem for all Machine Learning steps (e.g. collecting data, building models, hyper parameter tuning, model serving, ...).
 
-- [ ] As a Machine-Learning-practitioner, I would like to open my Kubeflow Dashboard through a secure HTTPS connection directly on the ip-address of my server.
+- [ ] As a Machine-Learning-practitioner, I would like to open my Kubeflow Dashboard through a **secure HTTPS connection** directly on the ip-address of my server.
 
 - [ ] As a Machine-Learning-practitionar, I would like to have a working **Kubernetes-cluster** and KubeFlow-environment **with multiple servers**, which can be added to the installation procedure (Terraform-script, KubeSpray-inventory), to scale my Machine Learning projects.
 
