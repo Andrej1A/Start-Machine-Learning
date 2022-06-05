@@ -343,7 +343,35 @@ http://<public_ip>:8888/
 
 ## Configure Ingress for secure HTTPS connections to your Kubeflow
 
-> This chapter is in progress...
+When you would like to make your Kubeflow available through a domain name, follow the next steps.
+
+1. First of all you should create an DNS A-Record on your nameserver which points to your public ip of your server.
+
+
+2. Create a file on your server `ingress_www.yourdomain.com.yaml`:
+```
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-kubeflow-http
+spec:
+  rules:
+  - host: www.yourdomain.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: istio-ingressgateway
+          servicePort: 80
+```
+
+3. Apply this file:
+```
+kubectl apply -f ingress_www.yourdomain.com.yaml --namespace istio-system
+```
+
+4. Now you should be able to see your Kubeflow dashboard on your browser through your domain name.
+> https://www.yourdomain.com/
 
 
 ## If something goes wrong
@@ -373,7 +401,7 @@ terraform destroy
 
 - [x] As a Machine-Learning-practitionar, I would like to have a **KubeFlow environment** for my Machine-Learning projects, to have a simple, portable and scalable ecosystem for all Machine Learning steps (e.g. collecting data, building models, hyper parameter tuning, model serving, ...).
 
-- [ ] As a Machine-Learning-practitioner, I would like to open my Kubeflow Dashboard through a **secure HTTPS connection** directly on the ip-address of my server.
+- [x] As a Machine-Learning-practitioner, I would like to open my Kubeflow Dashboard through a **secure HTTPS connection** directly on the ip-address of my server.
 
 - [ ] As a Machine-Learning-practitionar, I would like to have a working **Kubernetes-cluster** and KubeFlow-environment **with multiple servers**, which can be added to the installation procedure (Terraform-script, KubeSpray-inventory), to scale my Machine Learning projects.
 
