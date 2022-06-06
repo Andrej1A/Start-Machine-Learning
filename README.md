@@ -396,6 +396,8 @@ helm install --wait --generate-name \
      --set toolkit.enabled=true \
      --set migManager.enabled=false
 ```
+> If you would like to make changes to the GPU-Operator, you will find here [Chart Customization Options for the GPU-Operator](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html#chart-customization-options).
+
 
 After the GPU-Operator was installed and all his deployed pods were started successfully.
 You can describe your nodes with the following command. You will see information of how many and which GPUs are available inside your cluster.
