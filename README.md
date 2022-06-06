@@ -421,6 +421,39 @@ This can be a complicated part for beginners. If you would like to know more abo
 * [How to easily use GPUs on Kubernetes](https://info.nvidia.com/how-to-use-gpus-on-kubernetes-webinar.html)  
 * [NVIDIA GPU-Operator - GitHub Repository](https://github.com/NVIDIA/gpu-operator)
 * [NVIDIA GPU-Operator - Getting-Started](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html)
+* [CUDA®-enabled GPU cards - CUDA Compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html)
+* [Your GPU Compute Capability](https://developer.nvidia.com/cuda-gpus)
+* [NVIDIA Cuda Application Compatibility](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#application-compatibility)
+* [Tensorflow CUDA version support list](https://www.tensorflow.org/install/source#gpu)
+* [NVIDIA Multi-Instance GPU User Guide (MiG)](https://docs.nvidia.com/datacenter/tesla/mig-user-guide/index.html)
+* [Tensorflow - Hardware Requirements](https://www.tensorflow.org/install/pip#hardware_requirements)
+
+
+# How to use Tensorflow and PyTorch inside Kubeflow's Jupyter Notebook
+
+After you have installed everything successfully, you should be able to create a notebook inside Kubeflow.
+If you would like to use Tensorflow inside that Notebook, please use following images for that purpose:
+
+* Image Tensorflow with CUDA support - `notebooks/notebook-servers/jupyter-tensorflow-cuda-full:v1.5.0`
+```
+# Check GPUs are available in Tensorflow
+import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))
+```
+
+* Image PyTorch with CUDA support - `notebooks/notebook-servers/jupyter-pytorch-cuda-full:v1.5.0`
+```
+# Check GPUs are available in PyTorch
+import torch; print(torch.cuda.get_device_name(0))
+```
+
+
+# Check the status of your cluster
+
+Some useful commands to check the status of your Kubernetes cluster.
+```
+# CPU and Memory
+kubectl describe nodes | grep -E -A 3 "Resource|Requests|Limits|gpu"
+```
 
 
 ## If something goes wrong
