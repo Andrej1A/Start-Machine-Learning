@@ -189,7 +189,7 @@ all:
 ```
 
 
-7. Start the Ansible script to let Kubespray install Kubernetes on your GPU server.
+9. Start the Ansible script to let Kubespray install Kubernetes on your GPU server.
 
 Execute this command inside the kubespray folder.
 
@@ -205,7 +205,7 @@ In case the script is not running, try it again.
 When it continuous to fail, please create an issue and post us the error message with a description of your steps to reproduce the error.
 
 
-9. After the Ansible script run successfully through the installation. You have to copy the `/etc/kubernetes/admin.conf` file to your home directory `$HOME/.kube/config`. The admin.conf file has sometimes additional characters in it.
+10. After the Ansible script run successfully through the installation. You have to copy the `/etc/kubernetes/admin.conf` file to your home directory `$HOME/.kube/config`. The admin.conf file has sometimes additional characters in it.
 After that you can check the Kubernetes version:
 ```
 mkdir $HOME/.kube/
@@ -217,7 +217,7 @@ kubectl version
 
  > Server Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.6", GitCommit:"d921bc6d1810da51177fbd0ed61dc811c5228097", GitTreeState:"clean", BuildDate:"2021-10-27T17:44:26Z", GoVersion:"go1.16.9", Compiler:"gc", Platform:"linux/amd64"}
 
-10. After running the following command you can check the status of your Kubernetes cluster (with one node for now).
+11. After running the following command you can check the status of your Kubernetes cluster (with one node for now).
 
 - Check your nodes:
 ```
@@ -351,7 +351,7 @@ http://<public_ip>:8888/
 
 When you would like to make your Kubeflow available through a domain name, follow the next steps.
 
-1. First of all you should create an DNS A-Record on your nameserver which points to your public ip of your server.
+1. First of all you should create a DNS A-Record on your nameserver which points to your public ip of your server.
 
 
 2. Create a file on your server `ingress_www.yourdomain.com.yaml`:
@@ -378,6 +378,7 @@ kubectl apply -f ingress_www.yourdomain.com.yaml --namespace istio-system
 
 4. Now you should be able to see your Kubeflow dashboard on your browser through your domain name.
   > https://your-public-ip
+
   > https://www.yourdomain.com/
 
 
@@ -424,9 +425,7 @@ This can be a complicated part for beginners. If you would like to know more abo
 * [CUDA®-enabled GPU cards - CUDA Compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html)
 * [Your GPU Compute Capability](https://developer.nvidia.com/cuda-gpus)
 * [NVIDIA Cuda Application Compatibility](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#application-compatibility)
-* [Tensorflow CUDA version support list](https://www.tensorflow.org/install/source#gpu)
 * [NVIDIA Multi-Instance GPU User Guide (MiG)](https://docs.nvidia.com/datacenter/tesla/mig-user-guide/index.html)
-* [Tensorflow - Hardware Requirements](https://www.tensorflow.org/install/pip#hardware_requirements)
 
 
 # How to use Tensorflow and PyTorch inside Kubeflow's Jupyter Notebook
@@ -489,13 +488,15 @@ terraform destroy
 
 
 ## More Information
-- [Kubernetes](https://kubernetes.io) - [repo](https://github.com/kubernetes/kubernetes)
-- [Kubernetes concepts](https://kubernetes.io/docs/concepts/)
-- [Kubernetes Taint-and-toleration](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
-- [Kubeflow](https://www.kubeflow.org) - [repo](https://github.com/kubeflow/)
-- [AWS](https://aws.amazon.com)
-- [Terraform](https://www.terraform.io) - [repo](https://github.com/hashicorp/terraform)
-- [Kubeflow/manifests](https://github.com/kubeflow/manifests)
+* [Kubernetes](https://kubernetes.io) - [repo](https://github.com/kubernetes/kubernetes)
+* [Kubernetes concepts](https://kubernetes.io/docs/concepts/)
+* [Kubernetes Taint-and-toleration](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+* [Kubeflow](https://www.kubeflow.org) - [repo](https://github.com/kubeflow/)
+* [Kubeflow/manifests](https://github.com/kubeflow/manifests)
+* [AWS](https://aws.amazon.com)
+* [Terraform](https://www.terraform.io) - [repo](https://github.com/hashicorp/terraform)
+* [Tensorflow - Hardware Requirements](https://www.tensorflow.org/install/pip#hardware_requirements)
+* [Tensorflow CUDA version support list](https://www.tensorflow.org/install/source#gpu)
 
 
 ## Copyright
