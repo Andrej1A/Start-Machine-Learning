@@ -16,7 +16,9 @@ provider "aws" {
 resource "aws_instance" "gpu_server" {
     # ami in region (eu-west-1) - Deep Learning AMI (Ubuntu 18.04) Version 60.4
     ami = "ami-07afb32b4cb2c5c44" # the ami-id depends on your region
-    instance_type = "g3s.xlarge"
+    # instance_types: https://aws.amazon.com/ec2/instance-types/g3/
+    # available: g3s.xlarge, g3.4xlarge, g3.8xlarge, g3.16xlarge
+    instance_type = "g3.4xlarge" # at least g3.4xlarge for good performance
     key_name = "${var.aws_key_pair_name}"
     vpc_security_group_ids = [aws_security_group.main.id]
 

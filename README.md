@@ -96,7 +96,12 @@ terraform output gpu_server_private_ips
 cd kubespray/
 ```
 
-4. Follow the installation steps on [Kubespray#quick-start](https://github.com/kubernetes-sigs/kubespray#quick-start):
+4. Install requirements on deployment host
+```
+pip3 install -r requirements.txt
+```
+
+5. Follow the installation steps on [Kubespray#quick-start](https://github.com/kubernetes-sigs/kubespray#quick-start):
 
   The following commands should be executed inside the kubespray folder:
 
@@ -121,7 +126,7 @@ cat inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
 ```
 
 
-5. Configurations for your Kubernetes Cluster
+6. Configurations for your Kubernetes Cluster
 Kubeflow (which we will install later) supports Kubernetes version up to v1.21, please set this Kubernetes version into the following file: `inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml`. Additionaly, set the `nvidia_accelerator_enabled` to true and uncomment the `nvidia_gpu_device_plugin_container`.
 
 
@@ -130,7 +135,7 @@ File `inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml` contains:
 kube_version: v1.21.6
 
 nvidia_accelerator_enabled: true
-
+nvidia_gpu_flavor: tesla
 nvidia_gpu_device_plugin_container: "k8s.gcr.io/nvidia-gpu-device-plugin@sha256:0842734032018be107fa2490c98156992911e3e1f2a21e059ff0105b07dd8e9e"
 
 persistent_volumes_enabled: true
@@ -141,9 +146,11 @@ File `inventory/mycluster/group_vars/all/all.yml` contains:
 docker_storage_options: -s overlay2
 ```
 
-
 File `inventory/mycluster/group_vars/k8s_cluster/addons.yml` contains:
 ```
+# Helm deployment
+helm_enabled: true
+
 # Rancher Local Path Provisioner
 local_path_provisioner_enabled: true
 local_path_provisioner_namespace: "local-path-storage"
@@ -164,13 +171,12 @@ ingress_nginx_insecure_port: 80
 ingress_nginx_secure_port: 443
 ```
 
-
-5. Check your private ip which you will need in the next step:
+7. Check your private ip which you will need in the next step:
 ```
 terraform -chdir=../ output -json gpu_server_private_ips  | jq -r '.[0]'
 ```
 
-6. Change the username to `ubuntu` inside the inventory file and add the private ip: `inventory/mycluster/hosts.yml`
+8. Change the username to `ubuntu` inside the inventory file and add the private ip: `inventory/mycluster/hosts.yml`
 ```
 all:
   hosts:
@@ -199,7 +205,7 @@ In case the script is not running, try it again.
 When it continuous to fail, please create an issue and post us the error message with a description of your steps to reproduce the error.
 
 
-8. After the Ansible script run successfully through the installation. You have to copy the `/etc/kubernetes/admin.conf` file to your home directory `$HOME/.kube/config`. The admin.conf file has sometimes additional characters in it.
+9. After the Ansible script run successfully through the installation. You have to copy the `/etc/kubernetes/admin.conf` file to your home directory `$HOME/.kube/config`. The admin.conf file has sometimes additional characters in it.
 After that you can check the Kubernetes version:
 ```
 mkdir $HOME/.kube/
@@ -211,7 +217,7 @@ kubectl version
 
  > Server Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.6", GitCommit:"d921bc6d1810da51177fbd0ed61dc811c5228097", GitTreeState:"clean", BuildDate:"2021-10-27T17:44:26Z", GoVersion:"go1.16.9", Compiler:"gc", Platform:"linux/amd64"}
 
-9. After running the following command you can check the status of your Kubernetes cluster (with one node for now).
+10. After running the following command you can check the status of your Kubernetes cluster (with one node for now).
 
 - Check your nodes:
 ```
@@ -371,7 +377,49 @@ kubectl apply -f ingress_www.yourdomain.com.yaml --namespace istio-system
 ```
 
 4. Now you should be able to see your Kubeflow dashboard on your browser through your domain name.
-> https://www.yourdomain.com/
+  > https://your-public-ip
+  > https://www.yourdomain.com/
+
+
+# Make your GPUs available inside the Kubernetes cluster including Kubeflow
+
+The NVIDIA GPU-Operator will make your NVIDIA GPU's available inside your Kubernetes cluster.
+
+Install the GPU-Operator with the following command:
+```
+helm install --wait --generate-name \
+     -n gpu-operator --create-namespace \
+     nvidia/gpu-operator \
+     --set driver.enabled=false \
+     --set nfd.enabled=true \
+     --set mig.strategy=mixed \
+     --set toolkit.enabled=true \
+     --set migManager.enabled=false
+```
+
+After the GPU-Operator was installed and all his deployed pods were started successfully.
+You can describe your nodes with the following command. You will see information of how many and which GPUs are available inside your cluster.
+```
+kubectl describe nodes | grep -B 6 gpu
+
+#OUTPUT:
+# ...
+#Capacity:
+#  cpu:                16
+#  ephemeral-storage:  254059440Ki
+#  hugepages-1Gi:      0
+#  hugepages-2Mi:      0
+#  memory:             125702272Ki
+#  nvidia.com/gpu:     1  <---------- GPUs are here
+# ...
+```
+
+
+This can be a complicated part for beginners. If you would like to know more about how GPUs are made available inside your Kubernetes cluster and which components make it happen and how they work together, check the following resources:
+Useful resources:
+* [How to easily use GPUs on Kubernetes](https://info.nvidia.com/how-to-use-gpus-on-kubernetes-webinar.html)  
+* [NVIDIA GPU-Operator - GitHub Repository](https://github.com/NVIDIA/gpu-operator)
+* [NVIDIA GPU-Operator - Getting-Started](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html)
 
 
 ## If something goes wrong
