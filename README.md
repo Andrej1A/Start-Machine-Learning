@@ -416,7 +416,6 @@ kubectl describe nodes | grep -B 6 gpu
 
 
 This can be a complicated part for beginners. If you would like to know more about how GPUs are made available inside your Kubernetes cluster and which components make it happen and how they work together, check the following resources:
-Useful resources:
 * [How to easily use GPUs on Kubernetes](https://info.nvidia.com/how-to-use-gpus-on-kubernetes-webinar.html)  
 * [NVIDIA GPU-Operator - GitHub Repository](https://github.com/NVIDIA/gpu-operator)
 * [NVIDIA GPU-Operator - Getting-Started](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html)
