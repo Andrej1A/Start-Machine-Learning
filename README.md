@@ -490,7 +490,7 @@ terraform destroy
 
 - [ ] As a Machine-Learning-practitionar, I would like to see metrics (CPU, Memory, GPU utilization, disk space, ...) about my server landscape in **Prometheus** and get alerted in case limits exceed critical values.
 
-- [ ] If you have *any wishes*, please write me: andrejalbrecht@gmail.com
+- [ ] If you have **any wishes** or you would like to contribute to this project, please write me: andrejalbrecht@gmail.com
 
 
 ## More Information
