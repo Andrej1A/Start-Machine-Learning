@@ -484,7 +484,13 @@ terraform destroy
 
 - [x] As a Machine-Learning-practitioner, I would like to open my Kubeflow Dashboard through a **secure HTTPS connection** directly on the ip-address of my server.
 
-- [ ] As a Machine-Learning-practitionar, I would like to have a working **Kubernetes-cluster** and KubeFlow-environment **with multiple servers**, which can be added to the installation procedure (Terraform-script, KubeSpray-inventory), to scale my Machine Learning projects.
+- [ ] As a Machine-Learning-practitionar, I would like to store my data in `AWSElasticBlockStore`, `CephFS` and/or `NFS`.
+
+- [ ] As a Machine-Learning-practitionar, I would like to have a working **Kubernetes-cluster and KubeFlow-environment with multiple servers**, which can be added to the installation procedure (Terraform-script, KubeSpray-inventory), to scale my Machine Learning projects.
+
+- [ ] As a Machine-Learning-practitionar, I would like to see metrics (CPU, Memory, GPU utilization, disk space, ...) about my server landscape in **Prometheues** and get alerted in case limits exceed critical values.
+
+- [ ] If you have any wishes, please write me: andrejalbrecht@gmail.com
 
 
 ## More Information
@@ -497,6 +503,7 @@ terraform destroy
 * [Terraform](https://www.terraform.io) - [repo](https://github.com/hashicorp/terraform)
 * [Tensorflow - Hardware Requirements](https://www.tensorflow.org/install/pip#hardware_requirements)
 * [Tensorflow CUDA version support list](https://www.tensorflow.org/install/source#gpu)
+* [Monitoring GPUs in Kubernetes with DCGM](https://developer.nvidia.com/blog/monitoring-gpus-in-kubernetes-with-dcgm/)
 
 
 ## Copyright
