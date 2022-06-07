@@ -484,7 +484,7 @@ terraform destroy
 
 - [x] As a Machine-Learning-practitioner, I would like to open my Kubeflow Dashboard through a **secure HTTPS connection** directly on the ip-address of my server.
 
-- [ ] As a Machine-Learning-practitionar, I would like to *store my data* in `AWSElasticBlockStore`, `CephFS` and/or `NFS` to make the data available even if I reset the Kubernetes cluster.
+- [ ] As a Machine-Learning-practitionar, I would like to **store my data** in `AWSElasticBlockStore`, `CephFS` and/or `NFS` to make the data available even if I reset the Kubernetes cluster.
 
 - [ ] As a Machine-Learning-practitionar, I would like to have a working **Kubernetes-cluster and KubeFlow-environment with multiple servers**, which can be added to the installation procedure (Terraform-script, KubeSpray-inventory), to scale my Machine Learning projects.
 
