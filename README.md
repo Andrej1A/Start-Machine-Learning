@@ -134,11 +134,11 @@ File `inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml` contains:
 ```
 kube_version: v1.21.6
 
+persistent_volumes_enabled: true
+
 nvidia_accelerator_enabled: true
 nvidia_gpu_flavor: tesla
 nvidia_gpu_device_plugin_container: "k8s.gcr.io/nvidia-gpu-device-plugin@sha256:0842734032018be107fa2490c98156992911e3e1f2a21e059ff0105b07dd8e9e"
-
-persistent_volumes_enabled: true
 ```
 
 File `inventory/mycluster/group_vars/all/all.yml` contains:
@@ -484,11 +484,13 @@ terraform destroy
 
 - [x] As a Machine-Learning-practitioner, I would like to open my Kubeflow Dashboard through a **secure HTTPS connection** directly on the ip-address of my server.
 
-- [ ] As a Machine-Learning-practitionar, I would like to **store my data** in `AWSElasticBlockStore`, `CephFS` and/or `NFS` to make the data available even if I reset the Kubernetes cluster.
+- [ ] As a Machine-Learning-practitionar, I would like to **store my data persistently** in `MinIO`, `AWSElasticBlockStore` and/or `CephFS` to make the data available even if I reset the Kubernetes cluster.
 
 - [ ] As a Machine-Learning-practitionar, I would like to have a working **Kubernetes-cluster and KubeFlow-environment with multiple servers**, which can be added to the installation procedure (Terraform-script, KubeSpray-inventory), to scale my Machine Learning projects.
 
 - [ ] As a Machine-Learning-practitionar, I would like to see metrics (CPU, Memory, GPU utilization, disk space, ...) about my server landscape in **Prometheus** and get alerted in case limits exceed critical values.
+
+- [ ] As a Machine-Learning-practitionar, I would like to install Kubeflow on **GPU servers from GCP** (Google Cloud Platform).
 
 - [ ] If you have **any wishes** or you would like to contribute to this project, please write me: andrejalbrecht@gmail.com
 
